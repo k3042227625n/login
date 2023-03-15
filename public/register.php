@@ -1,5 +1,7 @@
 <?php
 
+require_once '../classes/UserLogic.php';
+
 // エラーメッセージ
 $err = [];
 
@@ -21,7 +23,12 @@ if ($password !== $password_conf) {
 }
 
 if (count($err) === 0) {
+    // ユーザを登録する処理
+    $hasCreated = UserLogic::createUser($_POST);
 
+    if(!$hasCreated) {
+        $err[] = '登録に失敗しました';
+    }
 }
 
 ?>
