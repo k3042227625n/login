@@ -16,14 +16,27 @@ if(!$password = filter_input(INPUT_POST, 'password')
     $err['password'] = 'パスワードを記入してください。';
 }
 
+if (count($err) === 0) {
+  // ログインする処理
+  echo 'ログインしました！';
+}
+
 if (count($err) > 0) {
-    // エラーがあった場合は戻す
+    // エラーがあった場合はSESSIONにエラーメッセージを入れた上でlogin.phpに戻す
     $_SESSION = $err;
     header('Location: login.php');
     return;
 }
 // ログイン成功時の処理
-echo 'ログインしました！';
+// echo 'ログインしました!';
+$result = UserLogic::login($email, $password);
+
+// ログイン失敗時の処理
+if (!$result) {
+  header('Location: login.php');
+  return;
+}
+echo 'ログイン成功です。';
 
 ?>
 <!DOCTYPE html>
