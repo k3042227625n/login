@@ -1,9 +1,17 @@
 <?php
-
+session_start();
 require_once '../classes/UserLogic.php';
 
 // エラーメッセージ
 $err = [];
+
+$token = filter_input(INPUT_POST, 'csrf_token');
+// トークンがない、もしくは一致しない場合、処理を中止
+if (!isset($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
+  exit('不正なリクエスト');
+}
+
+unset($_SESSION['csrf_token']);
 
 // バリデーション
 if(!$username = filter_input(INPUT_POST, 'username')) {
@@ -22,8 +30,9 @@ if ($password !== $password_conf) {
   $err[] = '確認用パスワードと異なっています。';
 }
 
+// エラーがない時の処理
 if (count($err) === 0) {
-    // ユーザを登録する処理
+    // ユーザを登録する処理(クラスと静的なメソッド)
     $hasCreated = UserLogic::createUser($_POST);
 
     if(!$hasCreated) {
@@ -38,6 +47,7 @@ if (count($err) === 0) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ユーザ登録完了画面</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <?php if (count($err) > 0) : ?>

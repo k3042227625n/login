@@ -1,4 +1,5 @@
 <?php
+require_once '../functions.php';
 
 ?>
 <!DOCTYPE html>
@@ -7,6 +8,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ユーザ登録画面</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h2>ユーザ登録フォーム</h2>
@@ -30,6 +32,7 @@
     <label for="password_conf">パスワード確認：</label>
     <input type="password" name="password_conf">
   </p>
+  <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
   <p>
     <input type="submit" value="新規登録">
   </p>
