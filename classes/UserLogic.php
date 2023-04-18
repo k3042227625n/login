@@ -46,6 +46,7 @@ class UserLogic
         // 結果
         $result = false;
         // ユーザをemailから検索して取得
+        // コードが冗長になるので別のところにロジックを作成(self)
         $user = self::getUserByEmail($email);
 
         if (!$user) {
@@ -64,7 +65,7 @@ class UserLogic
             session_regenerate_id(true);
             // ログイン成功
             $_SESSION['login_user'] = $user;
-            $result = ture;
+            $result = true;
             return $result;
         }
 
@@ -79,9 +80,7 @@ class UserLogic
     */
     public static function getUserByEmail($email)
     {
-        // SQLの準備
-        // SQLの実行
-        // SQLの結果を返す
+        // $emailでとってきた値を?に返す
         $sql = 'SELECT * FROM users WHERE email = ?';
 
         // emailを配列に入れる
@@ -113,5 +112,16 @@ class UserLogic
             return $result = true;
         }
         return $result;
+    }
+
+    /**
+    * ログアウト処理
+    * @param void
+    * @return bool $result
+    */
+    public static function logout()
+    {
+        $_SESSION = array();
+        session_destroy();
     }
 }
